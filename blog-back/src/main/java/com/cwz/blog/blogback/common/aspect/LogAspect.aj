@@ -1,10 +1,22 @@
 package com.cwz.blog.blogback.common.aspect;
 
+import com.alibaba.fastjson.JSON;
+import com.cwz.blog.blogback.common.annotation.LogAnnotation;
+import com.cwz.blog.blogback.common.util.HttpContextUtils;
+import com.cwz.blog.blogback.common.util.IpUtils;
+import com.cwz.blog.blogback.common.util.UserUtils;
+import com.cwz.blog.blogback.entity.Log;
+import com.cwz.blog.blogback.entity.User;
 import com.cwz.blog.blogback.service.LogService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
+import java.util.Date;
 
 /*
 * 日志切面
@@ -56,8 +68,53 @@ public aspect LogAspect {
         return result;
     }
 
-    private void saveLog(ProceedingJoinPoint joinPoint, long time){
+    private void saveLog(ProceedingJoinPoint joinPoint, long time) throws NoSuchMethodException {
+        // 获取抽象方法 (获取切入点的方法签名)
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
 
+        Log log = new Log();
+
+        // 获取当前类的对象, getTarget():获取目标对象
+        Class<?> clazz = joinPoint.getTarget().getClass();
+
+        // 获取当前类有LogAnnotation注解的方法,获取切入点方法的LogAnnotation注解类，根据该注解类的内置对象进行下一步操作
+        method = clazz.getMethod(method.getName(), method.getParameterTypes());
+        LogAnnotation logAnnotation = method.getAnnotation(LogAnnotation.class);
+        if(log != null){
+            log.setModule(logAnnotation.module());
+            log.setOperation(logAnnotation.operation());
+        }
+
+        // 切入点的方法名
+        String className = joinPoint.getTarget().getClass().getName();
+        String methodName = signature.getName();
+        log.setModule(className + "." + methodName + "()");
+
+        // 切入点的参数
+        Object[] args = joinPoint.getArgs();
+        String params = JSON.toJSONString(args);
+        log.setParams(params);
+
+        //获取request 设置IP地址
+        HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
+        log.setIp(IpUtils.getIpAddr(request));
+
+        //用户名
+        User user = UserUtils.getCurrentUser();
+        if(user != null){
+            log.setUserid(user.getId());
+            log.setNickname(user.getNickname());
+        } else {
+            // 常量后面跟这个一般是指类型，1L表示1是长整型，如果是1f 表示是float型
+            log.setUserid(-1L);
+            log.setNickname("获取用户信息为空");
+        }
+
+        log.setTime(time);
+        log.setCreateDate(new Date());
+
+        logService.saveLog(log);
     }
 
 }
