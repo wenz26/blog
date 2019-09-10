@@ -1,37 +1,25 @@
 package com.cwz.blog.blogback.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import javax.persistence.*;
+import javax.persistence.Table;
 import java.util.Date;
 
-@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
-@Entity//告诉JPA这是一个实体类（和数据表映射的类）
 @Table(name = "me_comment")
 public class Comment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //自增主键
     private Integer id;
 
-    @Column(name = "content")
     private String content;
 
-    @Column(name = "create_date")
     private Date createDate;
 
-    @Column(name = "article_id")
     private Integer articleId;
 
-    @Column(name = "author_id")
     private Long authorId;
 
-    @Column(name = "parent_id")
     private Integer parentId;
 
-    @Column(name = "to_uid")
     private Long toUid;
 
-    @Column(name = "level")
     private String level;
 
     public Integer getId() {

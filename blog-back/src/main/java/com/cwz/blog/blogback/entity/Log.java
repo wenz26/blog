@@ -1,43 +1,29 @@
 package com.cwz.blog.blogback.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import javax.persistence.*;
+import javax.persistence.Table;
 import java.util.Date;
 
-@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
-@Entity//告诉JPA这是一个实体类（和数据表映射的类）
 @Table(name = "sys_log")
 public class Log {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //自增主键
     private Integer id;
 
-    @Column(name = "create_date")
     private Date createDate;
 
-    @Column(name = "ip")
     private String ip;
 
-    @Column(name = "method")
     private String method;
 
-    @Column(name = "module")
     private String module;
 
-    @Column(name = "nickname")
     private String nickname;
 
-    @Column(name = "operation")
     private String operation;
 
-    @Column(name = "params")
     private String params;
 
-    @Column(name = "time")
     private Long time;
 
-    @Column(name = "userid")
     private Long userid;
 
     public Integer getId() {

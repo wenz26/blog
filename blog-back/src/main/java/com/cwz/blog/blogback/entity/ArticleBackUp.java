@@ -1,29 +1,51 @@
 package com.cwz.blog.blogback.entity;
 
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.CreatedDate;
+
+import javax.persistence.*;
 import java.util.Date;
 
+//使用JPA注解配置映射关系
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
+@Entity //告诉JPA这是一个实体类（和数据表映射的类）
 @Table(name = "me_article")
-public class Article {
+public class ArticleBackUp {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //自增主键
     private Integer id;
 
+    @Column(name = "comment_counts")
     private Integer commentCounts;
 
+    /*
+     * 审计日志，记录条目创建时间，自动赋值，不需要程序员手工赋值
+     */
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_date")
     private Date createDate;
 
+    @Column(name = "summary")
     private String summary;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "view_counts")
     private Integer viewCounts;
 
+    @Column(name = "weight")
     private Integer weight;
 
+    @Column(name = "author_id")
     private Long authorId;
 
+    @Column(name = "body_id")
     private Long bodyId;
 
+    @Column(name = "category_id")
     private Integer categoryId;
 
     public Integer getId() {

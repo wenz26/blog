@@ -1,53 +1,35 @@
 package com.cwz.blog.blogback.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
+import javax.persistence.Table;
 import java.util.Date;
 
-@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
-@Entity//告诉JPA这是一个实体类（和数据表映射的类）
 @Table(name = "sys_user")
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //自增主键
     private Long id;
 
-    @Column(name = "account")
     private String account;
 
-    @Column(name = "admin")
     private Boolean admin;
 
-    @Column(name = "avatar")
     private String avatar;
 
-    @Column(name = "create_date")
     private Date createDate;
 
-    @Column(name = "deleted")
     private Boolean deleted;
 
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "last_login")
     private Date lastLogin;
 
-    @Column(name = "mobile_phone_number")
     private String mobilePhoneNumber;
 
-    @Column(name = "nickname")
     private String nickname;
 
-    @Column(name = "password")
     private String password;
 
-    @Column(name = "salt")
     private String salt;
 
-    @Column(name = "status")
     private String status;
 
     public Long getId() {

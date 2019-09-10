@@ -1,6 +1,9 @@
 package com.cwz.blog.blogback.mapper;
 
 import com.cwz.blog.blogback.entity.ArticleBody;
+import com.cwz.blog.blogback.mapper.bean.BeanMapper;
+import org.apache.ibatis.annotations.Mapper;
 
-public interface ArticleBodyMapper {
+@Mapper
+public interface ArticleBodyMapper extends BeanMapper<ArticleBody> {
 }

@@ -2,15 +2,19 @@ package com.cwz.blog.blogback.common.controlleradvice;
 
 import com.cwz.blog.blogback.common.cache.RedisManager;
 import com.cwz.blog.blogback.common.result.Result;
+import com.cwz.blog.blogback.common.util.HttpContextUtils;
+import com.cwz.blog.blogback.oauth.OAuthSessionManager;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /*
 * 清除token
@@ -61,8 +65,19 @@ public class ClearTokenResponseBodyAdvice implements ResponseBodyAdvice {
     @Override
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType,
             Class aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
-        HttpServletRequest request = ((ServletServerHttpRequest)serverHttpRequest).getServletRequest();
 
+        //HttpServletRequest request = ((ServletServerHttpRequest)serverHttpRequest).getServletRequest();
+        HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
+        String token = request.getHeader(OAuthSessionManager.OAUTH_TOKEN);
+
+        HttpServletResponse response = ((ServletServerHttpResponse)serverHttpResponse).getServletResponse();
+
+        if(null != token){
+            /* ----------------------------
+            *   ---------以后修改--------------
+            *
+            * */
+        }
 
         return null;
     }
